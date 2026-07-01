@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Home from "./Home"
+import Home from "./Home";
 import axios from "axios";
 // import { json } from "react-router-dom";
 // import { BiSunFill, BiMoon } from "react-icons/bi";
@@ -9,18 +9,20 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
         const storedTheme = localStorage.getItem("theme");
         return storedTheme ? storedTheme : "light-theme";
     };
+
     const [selectedCategory, setSelectedCategory] = useState("");
     const [theme, setTheme] = useState(getInitialTheme());
     const [input, setInput] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [noResults, setNoResults] = useState(false);
     const [searchFocused, setSearchFocused] = useState(false);
-    const [showSearchResults,setShowSearchResults] = useState(false)
+    const [showSearchResults, setShowSearchResults] = useState(false);
+
     useEffect(() => {
         fetchData();
     }, []);
 
-    const fetchData = async (value) => {
+    const fetchData = async () => {
         try {
             const response = await axios.get("http://localhost:8080/api/products");
             setSearchResults(response.data);
@@ -32,12 +34,15 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
 
     const handleChange = async (value) => {
         setInput(value);
+
         if (value.length >= 1) {
-            setShowSearchResults(true)
+            setShowSearchResults(true);
+
             try {
                 const response = await axios.get(
                     `http://localhost:8080/api/products/search?keyword=${value}`
                 );
+
                 setSearchResults(response.data);
                 setNoResults(response.data.length === 0);
                 console.log(response.data);
@@ -51,41 +56,14 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
         }
     };
 
-
-    // const handleChange = async (value) => {
-    //   setInput(value);
-    //   if (value.length >= 1) {
-    //     setShowSearchResults(true);
-    //     try {
-    //       let response;
-    //       if (!isNaN(value)) {
-    //         // Input is a number, search by ID
-    //         response = await axios.get(`http://localhost:8080/api/products/search?id=${value}`);
-    //       } else {
-    //         // Input is not a number, search by keyword
-    //         response = await axios.get(`http://localhost:8080/api/products/search?keyword=${value}`);
-    //       }
-
-    //       const results = response.data;
-    //       setSearchResults(results);
-    //       setNoResults(results.length === 0);
-    //       console.log(results);
-    //     } catch (error) {
-    //       console.error("Error searching:", error.response ? error.response.data : error.message);
-    //     }
-    //   } else {
-    //     setShowSearchResults(false);
-    //     setSearchResults([]);
-    //     setNoResults(false);
-    //   }
-    // };
-
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
         onSelectCategory(category);
     };
+
     const toggleTheme = () => {
-        const newTheme = theme === "dark-theme" ? "light-theme" : "dark-theme";
+        const newTheme =
+            theme === "dark-theme" ? "light-theme" : "dark-theme";
         setTheme(newTheme);
         localStorage.setItem("theme", newTheme);
     };
@@ -102,14 +80,15 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
         "Toys",
         "Fashion",
     ];
+
     return (
         <>
             <header>
                 <nav className="navbar navbar-expand-lg fixed-top">
                     <div className="container-fluid">
-                        <a className="navbar-brand" href="https://telusko.com/">
-                            Telusko
-                        </a>
+
+                        {/* Brand Removed */}
+
                         <button
                             className="navbar-toggler"
                             type="button"
@@ -121,18 +100,27 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                         >
                             <span className="navbar-toggler-icon"></span>
                         </button>
+
                         <div
                             className="collapse navbar-collapse"
                             id="navbarSupportedContent"
                         >
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li className="nav-item">
-                                    <a className="nav-link active" aria-current="page" href="/">
+                                    <a
+                                        className="nav-link active"
+                                        aria-current="page"
+                                        href="/"
+                                    >
                                         Home
                                     </a>
                                 </li>
+
                                 <li className="nav-item">
-                                    <a className="nav-link" href="/add_product">
+                                    <a
+                                        className="nav-link"
+                                        href="/add_product"
+                                    >
                                         Add Product
                                     </a>
                                 </li>
@@ -153,7 +141,11 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                                             <li key={category}>
                                                 <button
                                                     className="dropdown-item"
-                                                    onClick={() => handleCategorySelect(category)}
+                                                    onClick={() =>
+                                                        handleCategorySelect(
+                                                            category
+                                                        )
+                                                    }
                                                 >
                                                     {category}
                                                 </button>
@@ -161,63 +153,75 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                                         ))}
                                     </ul>
                                 </li>
-
-                                <li className="nav-item"></li>
                             </ul>
-                            <button className="theme-btn" onClick={() => toggleTheme()}>
+
+                            <button
+                                className="theme-btn"
+                                onClick={toggleTheme}
+                            >
                                 {theme === "dark-theme" ? (
                                     <i className="bi bi-moon-fill"></i>
                                 ) : (
                                     <i className="bi bi-sun-fill"></i>
                                 )}
                             </button>
+
                             <div className="d-flex align-items-center cart">
-                                <a href="/cart" className="nav-link text-dark">
+                                <a
+                                    href="/cart"
+                                    className="nav-link text-dark"
+                                >
                                     <i
                                         className="bi bi-cart me-2"
-                                        style={{ display: "flex", alignItems: "center" }}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                        }}
                                     >
                                         Cart
                                     </i>
                                 </a>
-                                {/* <form className="d-flex" role="search" onSubmit={handleSearch} id="searchForm"> */}
+
                                 <input
                                     className="form-control me-2"
                                     type="search"
                                     placeholder="Search"
                                     aria-label="Search"
                                     value={input}
-                                    onChange={(e) => handleChange(e.target.value)}
-                                    onFocus={() => setSearchFocused(true)} // Set searchFocused to true when search bar is focused
-                                    onBlur={() => setSearchFocused(false)} // Set searchFocused to false when search bar loses focus
+                                    onChange={(e) =>
+                                        handleChange(e.target.value)
+                                    }
+                                    onFocus={() => setSearchFocused(true)}
+                                    onBlur={() => setSearchFocused(false)}
                                 />
+
                                 {showSearchResults && (
                                     <ul className="list-group">
                                         {searchResults.length > 0 ? (
                                             searchResults.map((result) => (
-                                                <li key={result.id} className="list-group-item">
-                                                    <a href={`/product/${result.id}`} className="search-result-link">
-                                                        <span>{result.name}</span>
+                                                <li
+                                                    key={result.id}
+                                                    className="list-group-item"
+                                                >
+                                                    <a
+                                                        href={`/product/${result.id}`}
+                                                        className="search-result-link"
+                                                    >
+                                                        <span>
+                                                            {result.name}
+                                                        </span>
                                                     </a>
                                                 </li>
                                             ))
                                         ) : (
                                             noResults && (
                                                 <p className="no-results-message">
-                                                    No Prouduct with such Name
+                                                    No Product with such Name
                                                 </p>
                                             )
                                         )}
                                     </ul>
                                 )}
-                                {/* <button
-                  className="btn btn-outline-success"
-                  onClick={handleSearch}
-                >
-                  Search Products
-                </button> */}
-                                {/* </form> */}
-                                <div />
                             </div>
                         </div>
                     </div>
