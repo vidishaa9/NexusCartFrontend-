@@ -231,4 +231,4 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     );
 };
 
-export default Navbar;
+export default Navbar;npm
